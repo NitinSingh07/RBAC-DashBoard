@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
+import { useNotifications } from "../context/NotificationContext";
 
 export function UsersView() {
   const [users, setUsers] = useState([]);
@@ -8,6 +9,7 @@ export function UsersView() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { addNotification } = useNotifications();
 
   useEffect(() => {
     loadData();
