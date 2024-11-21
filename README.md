@@ -35,6 +35,6 @@ A modern React-based Role-Based Access Control system with a clean user interfac
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/rbac-ui.git
+git clone https://github.com/NitinSingh07/RBAC-DashBoard.git
 cd rbac-ui
 ```
