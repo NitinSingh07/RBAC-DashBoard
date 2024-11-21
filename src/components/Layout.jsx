@@ -58,32 +58,37 @@ export function Layout({ children }) {
   };
 
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'dark' : ''}`}>
-      {/* Mobile sidebar backdrop */}
+    <div className={`min-h-screen transition-colors duration-300 ease-in-out ${theme === 'dark' ? 'dark' : ''}`}>
+      {/* Mobile sidebar backdrop - improved blur */}
       {sidebarOpen && (
         <div 
-          className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-40 lg:hidden
-                     transition-opacity duration-300 ease-in-out"
+          className="fixed inset-0 bg-gray-900/70 backdrop-blur-md z-40 lg:hidden
+                     transition-all duration-300 ease-in-out animate-fade-in"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar - enhanced gradients and shadows */}
       <div className={`
-        fixed top-0 left-0 bottom-0 w-72 bg-white dark:bg-gray-900
-        shadow-xl z-50 transform transition-all duration-300 ease-in-out
-        lg:translate-x-0 
+        fixed top-0 left-0 bottom-0 w-72 
+        bg-white dark:bg-gray-900/95
+        shadow-2xl dark:shadow-indigo-500/10
+        z-50 transform transition-all duration-300 ease-in-out
+        lg:translate-x-0 backdrop-blur-lg
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        border-r border-gray-200 dark:border-gray-800
+        border-r border-gray-200/50 dark:border-gray-700/50
       `}>
-        {/* Sidebar header with gradient */}
-        <div className="h-16 bg-gradient-to-r from-indigo-600 to-purple-600
+        {/* Sidebar header - improved gradient */}
+        <div className="h-16 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600
+                      dark:from-indigo-900 dark:via-purple-900 dark:to-indigo-900
+                      bg-[length:200%_100%] animate-gradient
                       flex items-center justify-between px-6">
           <div className="flex items-center space-x-3">
-            <div className="h-8 w-8 rounded-lg bg-white/20 flex items-center justify-center">
+            <div className="h-8 w-8 rounded-xl bg-white/20 flex items-center justify-center
+                          backdrop-blur-md shadow-lg shadow-black/10">
               <ShieldCheckIcon className="h-5 w-5 text-white" />
             </div>
-            <span className="text-xl font-bold text-white">RBAC </span>
+            <span className="text-xl font-bold text-white tracking-wide">RBAC</span>
           </div>
           <button 
             className="lg:hidden p-1 rounded-md hover:bg-white/20 transition-colors"
@@ -93,23 +98,26 @@ export function Layout({ children }) {
           </button>
         </div>
 
-        {/* Search bar */}
+        {/* Search bar - improved styling */}
         <div className="px-4 py-3">
-          <div className="relative">
-            <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+          <div className="relative group">
+            <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2
+                                        group-focus-within:text-indigo-500 transition-colors duration-200" />
             <input
               type="text"
               placeholder="Search..."
-              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 
-                       dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300
-                       focus:ring-2 focus:ring-indigo-500 focus:border-transparent
-                       transition-all duration-200"
+              className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200/50
+                       dark:border-gray-700/50 dark:bg-gray-800/50
+                       dark:text-gray-300 dark:placeholder-gray-500
+                       focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent
+                       transition-all duration-200 backdrop-blur-sm
+                       hover:bg-gray-50 dark:hover:bg-gray-800/70"
             />
           </div>
         </div>
 
-        {/* Navigation */}
-        <nav className="p-4 space-y-1">
+        {/* Navigation - improved active states and hover effects */}
+        <nav className="p-4 space-y-1.5">
           {navigation.map((item) => {
             const active = isActivePath(item.path);
             return (
@@ -118,10 +126,11 @@ export function Layout({ children }) {
                 to={item.path}
                 className={`
                   group flex items-center justify-between px-4 py-3 text-sm font-medium
-                  rounded-xl transition-all duration-200
+                  rounded-xl transition-all duration-300 ease-in-out
+                  hover:shadow-md dark:hover:shadow-indigo-500/10
                   ${active 
-                    ? 'bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/40 dark:to-purple-900/40 text-indigo-600 dark:text-indigo-400' 
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'}
+                    ? 'bg-gradient-to-r from-indigo-50/90 to-purple-50/90 dark:from-indigo-900/40 dark:to-purple-900/40 text-indigo-600 dark:text-indigo-400 shadow-lg dark:shadow-indigo-500/20' 
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50/90 dark:hover:bg-gray-800/90'}
                 `}
                 onClick={() => setSidebarOpen(false)}
               >
@@ -145,11 +154,13 @@ export function Layout({ children }) {
           })}
         </nav>
 
-        {/* User section */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-800
-                      bg-gray-50 dark:bg-gray-900/50">
-          <div className="flex items-center px-4 py-3 rounded-xl hover:bg-white dark:hover:bg-gray-800
-                        transition-colors duration-200 cursor-pointer">
+        {/* User section - improved card effect */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200/50 dark:border-gray-700/50
+                      bg-gray-50/90 dark:bg-gray-900/90 backdrop-blur-md">
+          <div className="flex items-center px-4 py-3 rounded-xl 
+                        hover:bg-white/80 dark:hover:bg-gray-800/80
+                        transition-all duration-300 ease-in-out cursor-pointer
+                        hover:shadow-lg dark:hover:shadow-indigo-500/10">
             <div className="relative">
               <UserCircleIcon className="h-10 w-10 text-gray-400" />
               <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-400 
@@ -160,19 +171,26 @@ export function Layout({ children }) {
               <p className="text-xs text-gray-500 dark:text-gray-400">admin@example.com</p>
             </div>
           </div>
+          {/* Quick actions - improved hover effects */}
           <div className="mt-3 grid grid-cols-3 gap-2">
-            <button className="flex flex-col items-center justify-center p-2 rounded-lg
-                           hover:bg-white dark:hover:bg-gray-800 transition-colors duration-200">
+            <button className="flex flex-col items-center justify-center p-2 rounded-xl
+                           hover:bg-white/80 dark:hover:bg-gray-800/80
+                           transition-all duration-300 ease-in-out
+                           hover:shadow-md dark:hover:shadow-indigo-500/10">
               <CogIcon className="h-5 w-5 text-gray-400" />
               <span className="mt-1 text-xs text-gray-500 dark:text-gray-400">Settings</span>
             </button>
-            <button className="flex flex-col items-center justify-center p-2 rounded-lg
-                           hover:bg-white dark:hover:bg-gray-800 transition-colors duration-200">
+            <button className="flex flex-col items-center justify-center p-2 rounded-xl
+                           hover:bg-white/80 dark:hover:bg-gray-800/80
+                           transition-all duration-300 ease-in-out
+                           hover:shadow-md dark:hover:shadow-indigo-500/10">
               <BellIcon className="h-5 w-5 text-gray-400" />
               <span className="mt-1 text-xs text-gray-500 dark:text-gray-400">Notifications</span>
             </button>
-            <button className="flex flex-col items-center justify-center p-2 rounded-lg
-                           hover:bg-white dark:hover:bg-gray-800 transition-colors duration-200">
+            <button className="flex flex-col items-center justify-center p-2 rounded-xl
+                           hover:bg-white/80 dark:hover:bg-gray-800/80
+                           transition-all duration-300 ease-in-out
+                           hover:shadow-md dark:hover:shadow-indigo-500/10">
               <ArrowLeftOnRectangleIcon className="h-5 w-5 text-gray-400" />
               <span className="mt-1 text-xs text-gray-500 dark:text-gray-400">Sign Out</span>
             </button>
@@ -180,14 +198,14 @@ export function Layout({ children }) {
         </div>
       </div>
 
-      {/* Main content */}
-      <div className="lg:pl-72">
-        {/* Top bar */}
+      {/* Main content area */}
+      <div className="lg:pl-72 transition-all duration-300 ease-in-out">
+        {/* Top bar - improved blur effect */}
         <header className={`
           fixed top-0 right-0 left-0 lg:left-72 z-30
-          transition-all duration-200
+          transition-all duration-300 ease-in-out
           ${scrolled 
-            ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-md' 
+            ? 'bg-white/70 dark:bg-gray-900/70 backdrop-blur-lg shadow-lg dark:shadow-indigo-500/10' 
             : 'bg-white dark:bg-gray-900'}
         `}>
           <div className="h-16 px-4 flex items-center justify-between">
@@ -244,15 +262,16 @@ export function Layout({ children }) {
           </div>
         </header>
 
-        {/* Page content */}
-        <main className="pt-16 min-h-screen bg-gray-50 dark:bg-gray-900">
+        {/* Main content - improved background */}
+        <main className="pt-16 min-h-screen bg-gray-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-gray-800">
           <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
             {children}
           </div>
         </main>
 
-        {/* Footer */}
-        <footer className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+        {/* Footer - improved styling */}
+        <footer className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm
+                        border-t border-gray-200/50 dark:border-gray-700/50">
           <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
               <p className="text-sm text-gray-500 dark:text-gray-400">

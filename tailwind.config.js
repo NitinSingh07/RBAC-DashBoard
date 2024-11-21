@@ -11,17 +11,17 @@ export default {
         // Your custom colors
       },
       animation: {
-        'fade-in': 'fadeIn 0.2s ease-in-out',
-        'slide-in': 'slideIn 0.2s ease-in-out',
+        'gradient': 'gradient 8s linear infinite',
+        'fade-in': 'fadeIn 0.3s ease-in-out',
       },
       keyframes: {
+        gradient: {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
         fadeIn: {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
-        },
-        slideIn: {
-          '0%': { transform: 'translateX(-100%)' },
-          '100%': { transform: 'translateX(0)' },
         },
       },
     },
