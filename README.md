@@ -9,7 +9,6 @@ A modern React-based Role-Based Access Control system with a clean user interfac
 - 🎨 Modern UI with Tailwind CSS
 - 📱 Responsive Design
 - 🔄 Real-time Updates
-- 🛡️ Secure Authentication
 - 📊 User Management
 - 👥 Role Management
 
