@@ -18,6 +18,7 @@ import {
 import { useDarkMode } from "../hooks/useDarkMode";
 import { useNotifications } from "../context/NotificationContext";
 import { NotificationPanel } from "./NotificationPanel";
+import { useAuth } from '../context/AuthContext';
 
 const navigation = [
   {
@@ -50,6 +51,7 @@ export function Layout({ children }) {
   } = useNotifications();
   const [isSendNotificationOpen, setIsSendNotificationOpen] = useState(false);
   const { addNotification } = useNotifications();
+  const { user, logout } = useAuth();
 
   // Handle scroll effect
   useEffect(() => {
@@ -220,6 +222,71 @@ export function Layout({ children }) {
     </button>
   );
 
+  const userSection = (
+    <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200/50 dark:border-gray-700/50
+                    bg-gray-50/90 dark:bg-gray-900/90 backdrop-blur-md">
+      <div className="flex items-center px-4 py-3 rounded-xl 
+                    hover:bg-white/80 dark:hover:bg-gray-800/80
+                    transition-all duration-300 ease-in-out cursor-pointer
+                    hover:shadow-lg dark:hover:shadow-indigo-500/10">
+        <div className="relative">
+          <UserCircleIcon className="h-10 w-10 text-gray-400" />
+          <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-400 
+                        ring-2 ring-white dark:ring-gray-900"></div>
+        </div>
+        <div className="ml-3">
+          <p className="text-sm font-medium text-gray-900 dark:text-gray-200">
+            {user?.name || 'Admin User'}
+          </p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            {user?.email}
+          </p>
+        </div>
+      </div>
+
+      {/* Quick actions */}
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        <button
+          className="flex flex-col items-center justify-center p-2 rounded-xl
+                     hover:bg-white/80 dark:hover:bg-gray-800/80
+                     transition-all duration-300 ease-in-out
+                     hover:shadow-md dark:hover:shadow-indigo-500/10"
+        >
+          <CogIcon className="h-5 w-5 text-gray-400" />
+          <span className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+            Settings
+          </span>
+        </button>
+        <SidebarNotificationButton />
+        <button
+          onClick={logout}
+          className="flex flex-col items-center justify-center p-2 rounded-xl
+                     hover:bg-white/80 dark:hover:bg-gray-800/80
+                     transition-all duration-300 ease-in-out
+                     hover:shadow-md dark:hover:shadow-indigo-500/10"
+        >
+          <ArrowLeftOnRectangleIcon className="h-5 w-5 text-gray-400" />
+          <span className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+            Sign Out
+          </span>
+        </button>
+      </div>
+    </div>
+  );
+
+  const profileButton = (
+    <button
+      className="hidden sm:flex items-center px-3 py-2 rounded-lg
+                 hover:bg-gray-100 dark:hover:bg-gray-800
+                 transition-colors duration-200"
+    >
+      <UserCircleIcon className="h-6 w-6 text-gray-500 dark:text-gray-400" />
+      <span className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+        {user?.name || 'Profile'}
+      </span>
+    </button>
+  );
+
   return (
     <div
       className={`min-h-screen transition-colors duration-300 ease-in-out ${
@@ -341,60 +408,7 @@ export function Layout({ children }) {
           })}
         </nav>
 
-        {/* User section - improved card effect */}
-        <div
-          className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200/50 dark:border-gray-700/50
-                      bg-gray-50/90 dark:bg-gray-900/90 backdrop-blur-md"
-        >
-          <div
-            className="flex items-center px-4 py-3 rounded-xl 
-                        hover:bg-white/80 dark:hover:bg-gray-800/80
-                        transition-all duration-300 ease-in-out cursor-pointer
-                        hover:shadow-lg dark:hover:shadow-indigo-500/10"
-          >
-            <div className="relative">
-              <UserCircleIcon className="h-10 w-10 text-gray-400" />
-              <div
-                className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-400 
-                            ring-2 ring-white dark:ring-gray-900"
-              ></div>
-            </div>
-            <div className="ml-3">
-              <p className="text-sm font-medium text-gray-900 dark:text-gray-200">
-                Admin User
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                admin@example.com
-              </p>
-            </div>
-          </div>
-          {/* Quick actions - improved hover effects */}
-          <div className="mt-3 grid grid-cols-3 gap-2">
-            <button
-              className="flex flex-col items-center justify-center p-2 rounded-xl
-                           hover:bg-white/80 dark:hover:bg-gray-800/80
-                           transition-all duration-300 ease-in-out
-                           hover:shadow-md dark:hover:shadow-indigo-500/10"
-            >
-              <CogIcon className="h-5 w-5 text-gray-400" />
-              <span className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                Settings
-              </span>
-            </button>
-            <SidebarNotificationButton />
-            <button
-              className="flex flex-col items-center justify-center p-2 rounded-xl
-                           hover:bg-white/80 dark:hover:bg-gray-800/80
-                           transition-all duration-300 ease-in-out
-                           hover:shadow-md dark:hover:shadow-indigo-500/10"
-            >
-              <ArrowLeftOnRectangleIcon className="h-5 w-5 text-gray-400" />
-              <span className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                Sign Out
-              </span>
-            </button>
-          </div>
-        </div>
+        {userSection}
       </div>
 
       {/* Main content area */}
@@ -450,17 +464,7 @@ export function Layout({ children }) {
 
               <NotificationButton />
 
-              {/* Profile dropdown */}
-              <button
-                className="hidden sm:flex items-center px-3 py-2 rounded-lg
-                              hover:bg-gray-100 dark:hover:bg-gray-800
-                              transition-colors duration-200"
-              >
-                <UserCircleIcon className="h-6 w-6 text-gray-500 dark:text-gray-400" />
-                <span className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Profile
-                </span>
-              </button>
+              {profileButton}
             </div>
           </div>
         </header>
