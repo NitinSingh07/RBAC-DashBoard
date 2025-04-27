@@ -38,11 +38,6 @@ const navigation = [
     path: "/roles",
     icon: ShieldCheckIcon,
   },
-  {
-    name: "Blog",
-    href: "/blog",
-    icon: DocumentTextIcon,
-  },
 ];
 
 function Layout() {
@@ -122,9 +117,14 @@ function Layout() {
 
     const handleSubmit = (e) => {
       e.preventDefault();
-      addNotification(notificationData);
+      addNotification({
+        ...notificationData,
+        author: {
+          name: user?.name,
+          email: user?.email,
+        },
+      });
       setIsSendNotificationOpen(false);
-      // Clear form
       setNotificationData({ title: "", message: "", type: "info" });
     };
 
@@ -132,7 +132,7 @@ function Layout() {
       <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
         <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
           <h3 className="text-lg font-medium mb-4 text-gray-900 dark:text-gray-100">
-            Send Notification
+            Post Blog
           </h3>
 
           <form onSubmit={handleSubmit}>
