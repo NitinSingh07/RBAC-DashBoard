@@ -1,13 +1,14 @@
-import { Fragment } from 'react';
-import { format } from 'date-fns';
-import { 
-  BellIcon, 
-  CheckCircleIcon, 
+import React from "react";
+import { Fragment } from "react";
+import { format } from "date-fns";
+import {
+  BellIcon,
+  CheckCircleIcon,
   ExclamationCircleIcon,
   InformationCircleIcon,
-  XMarkIcon 
-} from '@heroicons/react/24/outline';
-import { useNotifications } from '../context/NotificationContext';
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import { useNotification } from "../context/NotificationContext";
 
 const notificationIcons = {
   success: CheckCircleIcon,
@@ -16,25 +17,30 @@ const notificationIcons = {
   warning: ExclamationCircleIcon,
 };
 
-export function NotificationPanel() {
+function NotificationPanel() {
   const {
     notifications,
+    unreadCount,
     isNotificationPanelOpen,
     setIsNotificationPanelOpen,
     markAsRead,
     markAllAsRead,
     deleteNotification,
-    clearAll
-  } = useNotifications();
+    clearAll,
+  } = useNotification();
 
   if (!isNotificationPanelOpen) return null;
 
   return (
-    <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white dark:bg-gray-800 rounded-lg shadow-lg
-                    ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 dark:divide-gray-700">
+    <div
+      className="absolute right-0 mt-2 w-80 sm:w-96 bg-white dark:bg-gray-800 rounded-lg shadow-lg
+                    ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 dark:divide-gray-700"
+    >
       <div className="p-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">Notifications</h2>
+          <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+            Notifications
+          </h2>
           <div className="flex space-x-2">
             <button
               onClick={markAllAsRead}
@@ -65,15 +71,17 @@ export function NotificationPanel() {
                 <div
                   key={notification.id}
                   className={`p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 
-                    ${notification.isRead ? 'opacity-75' : ''}`}
+                    ${notification.isRead ? "opacity-75" : ""}`}
                 >
                   <div className="flex items-start">
                     <div className="flex-shrink-0">
-                      <Icon className={`h-6 w-6 ${
-                        notification.isRead 
-                          ? 'text-gray-400 dark:text-gray-500' 
-                          : 'text-indigo-600 dark:text-indigo-400'
-                      }`} />
+                      <Icon
+                        className={`h-6 w-6 ${
+                          notification.isRead
+                            ? "text-gray-400 dark:text-gray-500"
+                            : "text-indigo-600 dark:text-indigo-400"
+                        }`}
+                      />
                     </div>
                     <div className="ml-3 w-0 flex-1">
                       <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
@@ -91,7 +99,10 @@ export function NotificationPanel() {
                           Mark as read
                         </button>
                         <span className="text-xs text-gray-400 dark:text-gray-500">
-                          {format(new Date(notification.timestamp), 'MMM d, h:mm a')}
+                          {format(
+                            new Date(notification.timestamp),
+                            "MMM d, h:mm a"
+                          )}
                         </span>
                       </div>
                     </div>
@@ -112,4 +123,6 @@ export function NotificationPanel() {
       </div>
     </div>
   );
-} 
+}
+
+export default NotificationPanel;

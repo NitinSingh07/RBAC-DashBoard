@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, Outlet } from "react-router-dom";
 import {
   UserIcon,
   ShieldCheckIcon,
@@ -14,19 +14,20 @@ import {
   SunIcon,
   MoonIcon,
   PaperAirplaneIcon,
+  DocumentTextIcon,
 } from "@heroicons/react/24/outline";
 import { useDarkMode } from "../hooks/useDarkMode";
-import { useNotifications } from "../context/NotificationContext";
-import { NotificationPanel } from "./NotificationPanel";
-import { useAuth } from '../context/AuthContext';
+import { useNotification } from "../context/NotificationContext";
+import NotificationPanel from "./NotificationPanel";
+import { useAuth } from "../context/AuthContext";
 
 const navigation = [
-  {
-    name: "Dashboard",
-    path: "/",
-    icon: ChartBarIcon,
-    badge: { text: "New", color: "bg-green-100 text-green-800" },
-  },
+  // {
+  //   name: "Dashboard",
+  //   path: "/",
+  //   icon: ChartBarIcon,
+  //   badge: { text: "New", color: "bg-green-100 text-green-800" },
+  // },
   {
     name: "Users",
     path: "/users",
@@ -37,20 +38,27 @@ const navigation = [
     path: "/roles",
     icon: ShieldCheckIcon,
   },
+  {
+    name: "Blog",
+    href: "/blog",
+    icon: DocumentTextIcon,
+  },
 ];
 
-export function Layout({ children }) {
+function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [theme, toggleTheme] = useDarkMode();
   const location = useLocation();
-  const { 
-    unreadCount, 
-    isNotificationPanelOpen, 
-    setIsNotificationPanelOpen 
-  } = useNotifications();
+  const {
+    notification,
+    showNotification,
+    isNotificationPanelOpen,
+    setIsNotificationPanelOpen,
+    unreadCount,
+  } = useNotification();
   const [isSendNotificationOpen, setIsSendNotificationOpen] = useState(false);
-  const { addNotification } = useNotifications();
+  const { addNotification } = useNotification();
   const { user, logout } = useAuth();
 
   // Handle scroll effect
@@ -107,9 +115,9 @@ export function Layout({ children }) {
 
   const SendNotificationModal = () => {
     const [notificationData, setNotificationData] = useState({
-      title: '',
-      message: '',
-      type: 'info'
+      title: "",
+      message: "",
+      type: "info",
     });
 
     const handleSubmit = (e) => {
@@ -117,7 +125,7 @@ export function Layout({ children }) {
       addNotification(notificationData);
       setIsSendNotificationOpen(false);
       // Clear form
-      setNotificationData({ title: '', message: '', type: 'info' });
+      setNotificationData({ title: "", message: "", type: "info" });
     };
 
     return (
@@ -126,7 +134,7 @@ export function Layout({ children }) {
           <h3 className="text-lg font-medium mb-4 text-gray-900 dark:text-gray-100">
             Send Notification
           </h3>
-          
+
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -137,10 +145,12 @@ export function Layout({ children }) {
                          dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 
                          focus:ring-indigo-500"
                 value={notificationData.type}
-                onChange={(e) => setNotificationData({ 
-                  ...notificationData, 
-                  type: e.target.value 
-                })}
+                onChange={(e) =>
+                  setNotificationData({
+                    ...notificationData,
+                    type: e.target.value,
+                  })
+                }
               >
                 <option value="info">Information</option>
                 <option value="success">Success</option>
@@ -159,10 +169,12 @@ export function Layout({ children }) {
                          dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 
                          focus:ring-indigo-500"
                 value={notificationData.title}
-                onChange={(e) => setNotificationData({ 
-                  ...notificationData, 
-                  title: e.target.value 
-                })}
+                onChange={(e) =>
+                  setNotificationData({
+                    ...notificationData,
+                    title: e.target.value,
+                  })
+                }
                 required
               />
             </div>
@@ -176,10 +188,12 @@ export function Layout({ children }) {
                          dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 
                          focus:ring-indigo-500"
                 value={notificationData.message}
-                onChange={(e) => setNotificationData({ 
-                  ...notificationData, 
-                  message: e.target.value 
-                })}
+                onChange={(e) =>
+                  setNotificationData({
+                    ...notificationData,
+                    message: e.target.value,
+                  })
+                }
                 rows="3"
                 required
               />
@@ -223,20 +237,26 @@ export function Layout({ children }) {
   );
 
   const userSection = (
-    <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200/50 dark:border-gray-700/50
-                    bg-gray-50/90 dark:bg-gray-900/90 backdrop-blur-md">
-      <div className="flex items-center px-4 py-3 rounded-xl 
+    <div
+      className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200/50 dark:border-gray-700/50
+                    bg-gray-50/90 dark:bg-gray-900/90 backdrop-blur-md"
+    >
+      <div
+        className="flex items-center px-4 py-3 rounded-xl 
                     hover:bg-white/80 dark:hover:bg-gray-800/80
                     transition-all duration-300 ease-in-out cursor-pointer
-                    hover:shadow-lg dark:hover:shadow-indigo-500/10">
+                    hover:shadow-lg dark:hover:shadow-indigo-500/10"
+      >
         <div className="relative">
           <UserCircleIcon className="h-10 w-10 text-gray-400" />
-          <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-400 
-                        ring-2 ring-white dark:ring-gray-900"></div>
+          <div
+            className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-400 
+                        ring-2 ring-white dark:ring-gray-900"
+          ></div>
         </div>
         <div className="ml-3">
           <p className="text-sm font-medium text-gray-900 dark:text-gray-200">
-            {user?.name || 'Admin User'}
+            {user?.name || "Admin User"}
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-400">
             {user?.email}
@@ -282,7 +302,7 @@ export function Layout({ children }) {
     >
       <UserCircleIcon className="h-6 w-6 text-gray-500 dark:text-gray-400" />
       <span className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-        {user?.name || 'Profile'}
+        {user?.name || "Profile"}
       </span>
     </button>
   );
@@ -471,7 +491,9 @@ export function Layout({ children }) {
 
         {/* Main content - improved background */}
         <main className="pt-16 min-h-screen bg-gray-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-gray-800">
-          <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">{children}</div>
+          <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+            <Outlet />
+          </div>
         </main>
 
         {/* Footer - improved styling */}
@@ -509,3 +531,5 @@ export function Layout({ children }) {
     </div>
   );
 }
+
+export default Layout;

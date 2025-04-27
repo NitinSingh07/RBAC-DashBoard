@@ -1,29 +1,29 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { ShieldCheckIcon } from '@heroicons/react/24/outline';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { ShieldCheckIcon } from "@heroicons/react/24/outline";
 
 export function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setIsLoading(true);
-    
+
     try {
       if (login(email, password)) {
-        navigate('/');
+        navigate("/");
       } else {
-        setError('Invalid credentials. Please check your email and password.');
+        setError("Invalid credentials. Please check your email and password.");
       }
     } catch (err) {
-      setError('An error occurred during login. Please try again.');
+      setError("An error occurred during login. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -33,7 +33,7 @@ export function Login() {
     <div className="min-h-screen flex flex-col justify-center bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-grid-slate-100 dark:bg-grid-slate-900 bg-[size:20px_20px] opacity-5"></div>
-      
+
       <div className="relative sm:max-w-xl mx-auto w-full px-4">
         {/* Login Container */}
         <div className="bg-white dark:bg-gray-900 shadow-2xl rounded-2xl overflow-hidden">
@@ -66,7 +66,10 @@ export function Login() {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Email Field */}
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                >
                   Email address
                 </label>
                 <input
@@ -84,7 +87,10 @@ export function Login() {
 
               {/* Password Field */}
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                >
                   Password
                 </label>
                 <input
@@ -112,14 +118,30 @@ export function Login() {
               >
                 {isLoading ? (
                   <span className="flex items-center justify-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
                     </svg>
                     Signing in...
                   </span>
                 ) : (
-                  'Sign in'
+                  "Sign in"
                 )}
               </button>
             </form>
@@ -146,4 +168,6 @@ export function Login() {
       </div>
     </div>
   );
-} 
+}
+
+export default Login;

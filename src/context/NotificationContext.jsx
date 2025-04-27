@@ -1,25 +1,29 @@
-import { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback } from "react";
 
 // Create the context
 const NotificationContext = createContext(undefined);
 
 // Create the provider component
-export function NotificationProvider({ children }) {
+export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
   const [isNotificationPanelOpen, setIsNotificationPanelOpen] = useState(false);
+  const [notification, setNotification] = useState({ message: "", type: "" });
 
   const addNotification = useCallback((notification) => {
-    setNotifications(prev => [{
-      id: Date.now(),
-      timestamp: new Date(),
-      isRead: false,
-      ...notification
-    }, ...prev]);
+    setNotifications((prev) => [
+      {
+        id: Date.now(),
+        timestamp: new Date(),
+        isRead: false,
+        ...notification,
+      },
+      ...prev,
+    ]);
   }, []);
 
   const markAsRead = useCallback((notificationId) => {
-    setNotifications(prev =>
-      prev.map(notification =>
+    setNotifications((prev) =>
+      prev.map((notification) =>
         notification.id === notificationId
           ? { ...notification, isRead: true }
           : notification
@@ -28,14 +32,14 @@ export function NotificationProvider({ children }) {
   }, []);
 
   const markAllAsRead = useCallback(() => {
-    setNotifications(prev =>
-      prev.map(notification => ({ ...notification, isRead: true }))
+    setNotifications((prev) =>
+      prev.map((notification) => ({ ...notification, isRead: true }))
     );
   }, []);
 
   const deleteNotification = useCallback((notificationId) => {
-    setNotifications(prev =>
-      prev.filter(notification => notification.id !== notificationId)
+    setNotifications((prev) =>
+      prev.filter((notification) => notification.id !== notificationId)
     );
   }, []);
 
@@ -43,7 +47,19 @@ export function NotificationProvider({ children }) {
     setNotifications([]);
   }, []);
 
-  const unreadCount = notifications.filter(n => !n.isRead).length;
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
+
+  const showNotification = (message, type = "info") => {
+    setNotification({ message, type });
+    // Auto-hide notification after 3 seconds
+    setTimeout(() => {
+      setNotification({ message: "", type: "" });
+    }, 3000);
+  };
+
+  const hideNotification = () => {
+    setNotification({ message: "", type: "" });
+  };
 
   const value = {
     notifications,
@@ -54,7 +70,10 @@ export function NotificationProvider({ children }) {
     markAsRead,
     markAllAsRead,
     deleteNotification,
-    clearAll
+    clearAll,
+    notification,
+    showNotification,
+    hideNotification,
   };
 
   return (
@@ -62,13 +81,17 @@ export function NotificationProvider({ children }) {
       {children}
     </NotificationContext.Provider>
   );
-}
+};
 
 // Create the custom hook
-export function useNotifications() {
+export const useNotification = () => {
   const context = useContext(NotificationContext);
-  if (context === undefined) {
-    throw new Error('useNotifications must be used within a NotificationProvider');
+  if (!context) {
+    throw new Error(
+      "useNotification must be used within a NotificationProvider"
+    );
   }
   return context;
-} 
+};
+
+export default NotificationProvider;
