@@ -41,6 +41,49 @@ Before you begin, ensure you have the following installed:
 git clone https://github.com/NitinSingh07/RBAC-DashBoard.git
 cd rbac-ui
 ```
+### 2. Backend Setup
+
+```bash
+cd backend
+npm install
+```
+
+#### Configure Environment Variables
+
+Create a `.env` file in the `backend/` directory.
+
+#### Start the Backend Server
+
+```bash
+npm start
+```
+The backend will run on [http://localhost:5000](http://localhost:5000).
+
+---
+
+### 3. Frontend Setup
+
+```bash
+cd ../
+npm install
+```
+
+#### Start the Frontend
+
+```bash
+npm run dev
+```
+The frontend will run on [http://localhost:5173](http://localhost:5173) (Vite default).
+
+---
+---
+
+## Technologies Used
+
+- **Backend:** Node.js, Express.js, MongoDB, Mongoose, JWT
+- **Frontend:** React, React Router, Context API, Tailwind CSS, Heroicons, Axios
+
+---
 
 
 ## 🎨 Features in Detail
@@ -65,8 +108,4 @@ cd rbac-ui
 - Real-time notifications
 - Interactive data display
 - Profile management
-
-## 🔧 Configuration
-
-The project uses environment variables for configuration. Create a `.env` file in the root directory:
 
